@@ -2332,3 +2332,19 @@ h1 {
     grid-column:1/-1;
   }
 }
+
+/* Dedicated profile grid: reference is 4 columns */
+.profile-settings-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:18px !important;
+}
+.profile-settings-grid>.full-width{
+  grid-column:1/-1 !important;
+}
+@media (max-width:1199px){
+  .profile-settings-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media (max-width:700px){
+  .profile-settings-grid{grid-template-columns:1fr !important}
+}
