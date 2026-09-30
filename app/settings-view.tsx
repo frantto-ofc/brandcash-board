@@ -274,7 +274,6 @@ export function SettingsView({
                   placeholder="https://seunegocio.com.br"
                 />
               </label>
-
               <label htmlFor="settings-founder-role" className="settings-field">
                 <span>Cargo ou Atuação</span>
                 <Input
@@ -284,6 +283,8 @@ export function SettingsView({
                   placeholder="Ex.: Estrategista de marca"
                 />
               </label>
+
+
 
               <label htmlFor="settings-founder-bio" className="settings-field full-width">
                 <span>Assinatura Institucional / Bio Curta</span>
