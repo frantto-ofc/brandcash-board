@@ -212,7 +212,7 @@ export function SettingsView({
               </div>
             </div>
 
-            <div className="settings-form-grid">
+            <div className="settings-form-grid profile-settings-grid">
               <label htmlFor="settings-founder-name" className="settings-field">
                 <span>Nome do Fundador / Estrategista</span>
                 <Input
