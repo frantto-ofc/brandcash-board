@@ -2305,3 +2305,8 @@ h1 {
 .profile-photo-copy button:disabled{opacity:.4;cursor:default;text-decoration:none}
 .profile-workspace-avatar,.user-avatar{overflow:hidden}
 @media (max-width:700px){.profile-card-header{flex-direction:column}.profile-photo-control{align-self:flex-start}}
+
+@media (min-width:1100px){
+  .settings-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .settings-field.full{grid-column:1/-1}
+}
