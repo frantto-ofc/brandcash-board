@@ -2310,3 +2310,13 @@ h1 {
   .settings-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
   .settings-field.full{grid-column:1/-1}
 }
+
+/* Settings reference layout */
+@media (min-width:1200px){
+  .settings-grid{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:18px 18px;
+  }
+  .settings-field.full{grid-column:1/-1 !important}
+}
