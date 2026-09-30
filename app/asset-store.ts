@@ -1,0 +1,6 @@
+export type BrandAsset={id:string;name:string;type:string;size:number;createdAt:string;file?:Blob;url?:string;description:string;archived?:boolean};
+function openDB():Promise<IDBDatabase>{return new Promise((resolve,reject)=>{const r=indexedDB.open('brandcash-assets-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('assets',{keyPath:'id'});r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
+export async function listAssets():Promise<BrandAsset[]>{const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction('assets','readonly');const r=tx.objectStore('assets').getAll();r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);tx.oncomplete=()=>db.close()})}
+export async function putAsset(asset:BrandAsset){const db=await openDB();return new Promise<void>((resolve,reject)=>{const tx=db.transaction('assets','readwrite');tx.objectStore('assets').put(asset);tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>{db.close();reject(tx.error)}})}
+export function safeWebUrl(raw:string){try{const url=new URL(raw);return ['https:','http:'].includes(url.protocol)?url.href:null}catch{return null}}
+export function downloadBlob(blob:Blob,name:string){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
