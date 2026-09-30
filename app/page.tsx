@@ -173,9 +173,11 @@ function Dashboard() {
         </SidebarHeader>
         <SidebarContent className="side-content">
           <div className="workspace-label">
-            <span className="workspace-icon">B</span>
+            <span className="workspace-icon profile-workspace-avatar">
+              {plan.profile_photo ? <img src={plan.profile_photo} alt="" /> : (plan.business_name?.[0] || 'B').toUpperCase()}
+            </span>
             <div>
-              Meu negócio<small>Plano de implementação</small>
+              {plan.business_name || 'Meu negócio'}<small>{plan.founder_name || 'Plano de implementação'}</small>
             </div>
           </div>
           <SidebarMenu>
@@ -255,7 +257,11 @@ function Dashboard() {
             title="Abrir Perfil & Configurações"
           >
             <div className="user-avatar">
-              {(plan.founder_name?.[0] || plan.business_name?.[0] || 'B').toUpperCase()}
+              {plan.profile_photo ? (
+                <img src={plan.profile_photo} alt="" />
+              ) : (
+                (plan.founder_name?.[0] || plan.business_name?.[0] || 'B').toUpperCase()
+              )}
             </div>
             <div className="user-info">
               <strong>{plan.founder_name || 'Fundador'}</strong>
