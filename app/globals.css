@@ -2320,3 +2320,15 @@ h1 {
   }
   .settings-field.full{grid-column:1/-1 !important}
 }
+
+/* Exact profile form layout from reference */
+@media (min-width:1200px){
+  .settings-tab-content[data-state="active"] .settings-card .settings-form-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    column-gap:18px;
+    row-gap:18px;
+  }
+  .settings-form-grid .settings-field.full-width{
+    grid-column:1/-1;
+  }
+}
