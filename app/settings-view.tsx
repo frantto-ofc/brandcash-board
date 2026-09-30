@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   User,
   Sparkles,
@@ -16,6 +16,7 @@ import {
   AlertTriangle,
   Layers,
   ShieldCheck,
+  Camera,
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -46,11 +47,33 @@ export function SettingsView({
   const [savedNotice, setSavedNotice] = useState('');
   const [confirmReset, setConfirmReset] = useState(false);
   const [assets, setAssets] = useState<BrandAsset[]>([]);
+  const photoInputRef = useRef<HTMLInputElement>(null);
 
   // Carregar assets para diagnóstico de armazenamento
   useEffect(() => {
     listAssets().then(setAssets).catch(() => {});
   }, []);
+
+  function handleProfilePhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Escolha um arquivo de imagem.');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      alert('A foto deve ter no máximo 2 MB.');
+      e.target.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      update('profile_photo', String(reader.result || ''));
+      notify('Foto do perfil atualizada!');
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
 
   function notify(msg: string) {
     setSavedNotice(msg);
@@ -160,12 +183,33 @@ export function SettingsView({
         {/* ABA 1: PERFIL & NEGÓCIO */}
         <TabsContent value="profile" className="settings-tab-content">
           <div className="settings-card">
-            <div className="settings-card-header">
-              <h3>Identidade do Fundador & Marca</h3>
-              <p>
-                Esses dados personalizam as exportações, orientações do agente e
-                propostas geradas no BrandCash.
-              </p>
+            <div className="settings-card-header profile-card-header">
+              <div>
+                <h3>Identidade do Fundador & Marca</h3>
+                <p>
+                  Esses dados personalizam as exportações, orientações do agente e
+                  propostas geradas no BrandCash.
+                </p>
+              </div>
+              <div className="profile-photo-control">
+                <div className="profile-photo-preview">
+                  {plan.profile_photo ? (
+                    <img src={plan.profile_photo} alt="Foto do perfil" />
+                  ) : (
+                    <span>{(plan.founder_name?.[0] || plan.business_name?.[0] || "B").toUpperCase()}</span>
+                  )}
+                  <span className="profile-photo-camera"><Camera size={12} /></span>
+                </div>
+                <div className="profile-photo-copy">
+                  <strong>Foto do perfil</strong>
+                  <div>
+                    <button type="button" onClick={() => photoInputRef.current?.click()}>Trocar</button>
+                    <span>·</span>
+                    <button type="button" onClick={() => { update("profile_photo", ""); notify("Foto removida."); }} disabled={!plan.profile_photo}>Remover</button>
+                  </div>
+                </div>
+                <input ref={photoInputRef} type="file" accept="image/*" hidden onChange={handleProfilePhoto} />
+              </div>
             </div>
 
             <div className="settings-form-grid">
@@ -228,6 +272,16 @@ export function SettingsView({
                   value={plan.website_url || ''}
                   onChange={(e) => update('website_url', e.target.value)}
                   placeholder="https://seunegocio.com.br"
+                />
+              </label>
+
+              <label htmlFor="settings-founder-role" className="settings-field">
+                <span>Cargo ou Atuação</span>
+                <Input
+                  id="settings-founder-role"
+                  value={plan.founder_role || ''}
+                  onChange={(e) => update('founder_role', e.target.value)}
+                  placeholder="Ex.: Estrategista de marca"
                 />
               </label>
 
